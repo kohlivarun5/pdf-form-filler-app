@@ -115,6 +115,7 @@ onDone() {
   });
   
   console.log(ret);
+  alert(JSON.stringify(ret,null,2));
 }
 
 submit() {
