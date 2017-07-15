@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { NavController, NavParams } from 'ionic-angular';
 
 function getValue(val) {
   if(val === true){
@@ -19,16 +20,7 @@ function convFieldJson2FDF(fields,ret) {
   });
 };
 
-
-
-@Component({
-templateUrl: 'i539.html'
-})
-export class I539 {
-
-data = {
-  currentGroup : 0,
-  groups : [
+var groups = [
 [
   {
     "label":"Family Name",
@@ -104,26 +96,38 @@ data = {
 
 ]
 
-}
 
-onDone() {
-  console.log(this.data)
+@Component({ templateUrl: 'i539.html' })
 
-  var ret = {};
-  this.data.groups.map(function(group) {
-    convFieldJson2FDF(group,ret);
-  });
-  
-  console.log(ret);
-  alert(JSON.stringify(ret,null,2));
-}
+export class I539 {
 
-submit() {
-  if (this.data.currentGroup === (this.data.groups.length - 1)) {
-    this.onDone()
-  } else {
-    this.data.currentGroup++
+  currentGroup : any;
+  groups : any;
+
+  constructor(public navCtrl: NavController, navParams: NavParams) {
+    this.currentGroup = navParams.get('currentGroup') || 0;
+    this.groups = navParams.get('groups') || groups;
   }
-}
+
+  onDone() {
+    var ret = {};
+    this.groups.map(function(group) {
+      convFieldJson2FDF(group,ret);
+    });
+    
+    console.log(ret);
+    alert(JSON.stringify(ret,null,2));
+  }
+
+  submit() {
+    if (this.currentGroup === (this.groups.length - 1)) {
+      this.onDone()
+    } else {
+      this.navCtrl.push(I539,{
+        currentGroup:this.currentGroup+1,
+        groups:this.groups
+      });
+    }
+  }
 
 }
