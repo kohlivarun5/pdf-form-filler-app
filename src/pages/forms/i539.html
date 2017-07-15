@@ -8,15 +8,19 @@
 </ion-header>
 
 <ion-content padding>
-  <form (ngSubmit)="logForm()">
+  <form (ngSubmit)="submit()">
     <ion-list>
 
-      <ion-item *ngFor="let field of data.groups[currentGroup]">
+      <ion-item *ngFor="let field of data.groups[data.currentGroup]">
         <ion-label floating>{{field.label}}</ion-label>
-        <ion-input type="text" [(ngModel)]="field.fieldValue" name="{{field.label}}"></ion-input>
+        <ion-input type="text" 
+                   [(ngModel)]="field.fieldValue" 
+                   name="{{field.label}}"
+                   [required]="!field.optional">
+        </ion-input>
       </ion-item>
 
     </ion-list>
-    <button ion-button type="submit" block>Submit</button>
+    <button ion-button type="submit" block>{{this.data.currentGroup !== (this.data.groups.length - 1) ? 'Next' : 'Submit' }}</button>
   </form>
 </ion-content>
